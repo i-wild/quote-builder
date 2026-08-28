@@ -64,7 +64,12 @@ h2{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:v
 @media (max-width:560px){.gate-row{grid-template-columns:1fr;}}
 .gate-row input{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:11px 14px;}
 .gate-row input.invalid{border-color:#E86A5C;}
+.gate-row input:disabled{opacity:.55;background:var(--ink);cursor:not-allowed;}
 .gate-err{font-size:11.5px;color:#E86A5C;margin-top:6px;min-height:14px;}
+.gate-locked-note{font-size:11.5px;color:var(--cyan);margin-top:8px;display:none;}
+.gate-locked-note.show{display:block;}
+
+.locked{opacity:.35;pointer-events:none;filter:grayscale(.4);transition:opacity .2s, filter .2s;}
 
 .grid{display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start;}
 @media (max-width:860px){.grid{grid-template-columns:1fr;}}
@@ -186,6 +191,7 @@ textarea:focus, input:focus, .card:focus-visible, .sub-item:focus-visible, .prio
       <div><input type="email" id="g-email" data-i18n-ph="emailPh" autocomplete="email"></div>
     </div>
     <div class="gate-err" id="g-err"></div>
+    <div class="gate-locked-note" id="g-locked-note" data-i18n="gateLockedNote"></div>
   </div>
 
   <div class="grid locked" id="mainGrid">
@@ -232,7 +238,6 @@ textarea:focus, input:focus, .card:focus-visible, .sub-item:focus-visible, .prio
         <div class="platform-note" data-i18n="platformNote"></div>
 
         <button class="action-btn" id="emailBtn" data-i18n="sendBtn"></button>
-        <button class="action-btn secondary" id="copyBtn" data-i18n="copyBtn"></button>
         <div class="note" data-i18n="sendNote"></div>
       </div>
     </div>
@@ -250,18 +255,11 @@ textarea:focus, input:focus, .card:focus-visible, .sub-item:focus-visible, .prio
   </section>
 
   <footer class="legal-footer">
+    <p data-i18n="privacyNotice"></p>
     <p data-i18n="legalFooter1"></p>
     <p data-i18n="legalFooter2"></p>
     <p data-i18n="legalFooter3"></p>
   </footer>
-
-  <!-- Netlify Forms endpoint: submissions can be configured in Netlify to notify
-       soluciones.digitales.empresariales@outlook.com. -->
-  <form name="quote-request" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" class="hidden-netlify">
-    <input type="hidden" name="form-name" value="quote-request">
-    <input name="bot-field">
-    <input type="hidden" name="quote-data" id="netlifyQuoteData">
-  </form>
 
 </div>
 
@@ -273,6 +271,8 @@ const I18N = {
   es: {
     brandName:'Soluciones Digitales Empresariales',
     brandTagline:'Cotizador de Servicios',
+    gateLockedNote:'Nombre y correo bloqueados una vez iniciada la solicitud, para asegurar que la cotización corresponda a estos datos de contacto.',
+    privacyNotice:'Aviso de privacidad (México): esta página no almacena, procesa ni conserva ninguna información en ningún servidor. Los datos que ingreses solo se usan para generar el correo que se envía directamente desde tu propio cliente de correo — por eso el único medio de envío es el botón de correo. Tanto tú como Soluciones Digitales Empresariales reciben una copia idéntica del formulario con tus respuestas.',
     legalFooter1:'Esta página es únicamente una herramienta de cotización de servicios; no constituye una factura, contrato ni aceptación de trabajo.',
     legalFooter2:'El precio final y la contratación se acuerdan y formalizan en la plataforma Upwork.',
     legalFooter3:'© Soluciones Digitales Empresariales. Este sitio y su diseño son propiedad reservada; queda prohibida su reproducción total o parcial sin autorización.',
@@ -307,8 +307,7 @@ const I18N = {
     scopeDisclaimer:'<strong>La cifra mostrada es una referencia de tarifa y alcance, no una aceptación automática del trabajo.</strong> La cotización final se confirma después de revisar el alcance. Cualquier trabajo, adaptación o elemento necesario que quede fuera del alcance acordado se cotiza por separado.',
     platformNote:'Cuando la contratación se realice por Upwork, la tarifa acordada se formaliza dentro de la plataforma y el trabajo inicia una vez cubiertos los requisitos de contratación correspondientes.',
     sendBtn:'Enviar cotización por correo',
-    copyBtn:'Copiar para Upwork',
-    sendNote:'El correo incluirá la información de la solicitud, la referencia de cotización y el disclaimer. La opción de Upwork copia una versión lista para pegar en la plataforma.',
+    sendNote:'Recibirás una copia idéntica de este formulario en tu correo, junto con el disclaimer y las condiciones. Yo recibo la misma copia en automático.',
     quoteDisclaimerTitle:'Información que acompaña la cotización',
     termsTitle:'Condiciones a considerar',
     copyTermsBtn:'Copiar condiciones',
@@ -344,6 +343,8 @@ const I18N = {
   en: {
     brandName:'Soluciones Digitales Empresariales',
     brandTagline:'Service Quote Builder',
+    gateLockedNote:'Name and email locked once a request is started, so the quote matches these contact details.',
+    privacyNotice:'Privacy notice (Mexico): this page does not store, process, or retain any information on any server. What you enter is only used to generate the email sent directly from your own email client — that\'s why email is the only submission method. Both you and Soluciones Digitales Empresariales receive an identical copy of the completed form.',
     legalFooter1:'This page is only a service-quoting tool; it does not constitute an invoice, contract, or acceptance of work.',
     legalFooter2:'The final price and the engagement are agreed on and formalized on the Upwork platform.',
     legalFooter3:'© Soluciones Digitales Empresariales. This site and its design are reserved property; reproduction in whole or in part without authorization is prohibited.',
@@ -378,8 +379,7 @@ const I18N = {
     scopeDisclaimer:'<strong>The amount shown is an initial scope and rate reference, not automatic acceptance of the work.</strong> The final quote is confirmed after the scope is reviewed. Any work, adaptation, or item required outside the agreed scope is quoted separately.',
     platformNote:'When the engagement is handled through Upwork, the agreed rate is formalized on the platform and work begins once the applicable contracting requirements are completed.',
     sendBtn:'Send quote by email',
-    copyBtn:'Copy for Upwork',
-    sendNote:'The email version includes the request, quote reference, and disclaimer. The Upwork option copies a version ready to paste into the platform.',
+    sendNote:'You will receive an identical copy of this form by email, along with the disclaimer and terms. I automatically receive the same copy.',
     quoteDisclaimerTitle:'Information accompanying the quote',
     termsTitle:'Terms to consider',
     copyTermsBtn:'Copy terms',
@@ -514,7 +514,13 @@ function buildTerms(){
 function selectCategory(id){
   state.cat=id; state.sub=null;
   [...document.getElementById('categories').children].forEach(c=>c.classList.toggle('active',c.dataset.id===id));
+  lockContactFields();
   renderSubs(); updateTicket();
+}
+
+function lockContactFields(){
+  gName.disabled=true; gEmail.disabled=true;
+  document.getElementById('g-locked-note').classList.add('show');
 }
 
 function renderSubs(){
@@ -663,72 +669,14 @@ function buildEmailBody(q){
   ].join('\n');
 }
 
-function buildUpworkText(q){
-  return [
-    'ACUMATICA PROJECT REQUEST',
-    '',
-    `Client: ${q.client}`,
-    `Email: ${q.email}`,
-    `Topic: ${q.topic}`,
-    `Specific need: ${q.need}`,
-    `Recommended package: ${q.package}`,
-    `Priority: ${q.priority}`,
-    `Estimated delivery: ${q.delivery}`,
-    `Base quote: ${q.baseRate}`,
-    '',
-    'Project description:',
-    q.description,
-    '',
-    'Scope / quote disclaimer:',
-    q.disclaimer,
-    '',
-    'Terms:',
-    ...q.terms.map((x,i)=>`${i+1}. ${x}`)
-  ].join('\n');
-}
-
-async function submitToNetlify(q){
-  const form=document.querySelector('form[name="quote-request"]');
-  const data=new URLSearchParams();
-  data.append('form-name','quote-request');
-  data.append('quote-data',buildEmailBody(q));
-  try{
-    const response=await fetch('/',{
-      method:'POST',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:data.toString()
-    });
-    return response.ok;
-  }catch(e){return false;}
-}
-
-document.getElementById('copyBtn').addEventListener('click',async()=>{
-  if(!checkGate())return;
-  const q=buildQuoteObject();
-  const text=buildUpworkText(q);
-  try{
-    await navigator.clipboard.writeText(text);
-    const btn=document.getElementById('copyBtn');
-    const orig=btn.textContent;
-    btn.textContent=lang==='es'?'Copiado ✓':'Copied ✓';
-    setTimeout(()=>btn.textContent=orig,2200);
-  }catch(e){
-    alert(text);
-  }
-});
-
-document.getElementById('emailBtn').addEventListener('click',async()=>{
+document.getElementById('emailBtn').addEventListener('click',()=>{
   if(!checkGate())return;
   const q=buildQuoteObject();
   document.getElementById('quoteDisclaimer').classList.add('show');
   document.getElementById('quoteDisclaimerText').innerHTML=t('termsItems').map(x=>`<p>• ${x}</p>`).join('');
-  const netlifySent=await submitToNetlify(q);
   const subject=`Acumatica quote — ${q.topic} — ${q.client}`;
   const body=buildEmailBody(q);
   window.location.href=`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  if(!netlifySent){
-    setTimeout(()=>alert(t('emailSuccess')),400);
-  }
 });
 
 document.getElementById('copyTermsBtn').addEventListener('click',async()=>{
