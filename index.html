@@ -28,6 +28,12 @@ body{
   color:var(--text); font-family:'IBM Plex Sans',sans-serif; min-height:100vh; padding:32px 20px 80px;
 }
 .wrap{max-width:1080px;margin:0 auto;position:relative;}
+.brand-header{text-align:left;margin-bottom:26px;padding-right:80px;}
+.brand-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,3vw,26px);letter-spacing:.01em;color:var(--text);margin:0;}
+.brand-tagline{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(15px,2.2vw,19px);color:var(--cyan);margin:4px 0 0;}
+.legal-footer{max-width:1080px;margin:40px auto 0;padding-top:18px;border-top:1px solid var(--line);}
+.legal-footer p{font-size:11px;line-height:1.6;color:var(--muted);margin:0 0 6px;}
+.legal-footer p:last-child{margin-bottom:0;}
 header{margin-bottom:22px;padding-right:80px;}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:10px;}
 .eyebrow::before{content:"";width:18px;height:1px;background:var(--cyan);display:inline-block;}
@@ -139,6 +145,11 @@ textarea:focus, input:focus, .card:focus-visible, .sub-item:focus-visible, .prio
     <button id="lb-en" onclick="setLang('en')">EN</button>
   </div>
 
+  <div class="brand-header">
+    <p class="brand-name" data-i18n="brandName"></p>
+    <p class="brand-tagline" data-i18n="brandTagline"></p>
+  </div>
+
   <header>
     <div class="eyebrow" data-i18n="eyebrow"></div>
     <h1 data-i18n="h1"></h1>
@@ -238,6 +249,12 @@ textarea:focus, input:focus, .card:focus-visible, .sub-item:focus-visible, .prio
     <button class="action-btn secondary" id="copyTermsBtn" data-i18n="copyTermsBtn" style="margin-top:16px;"></button>
   </section>
 
+  <footer class="legal-footer">
+    <p data-i18n="legalFooter1"></p>
+    <p data-i18n="legalFooter2"></p>
+    <p data-i18n="legalFooter3"></p>
+  </footer>
+
   <!-- Netlify Forms endpoint: submissions can be configured in Netlify to notify
        soluciones.digitales.empresariales@outlook.com. -->
   <form name="quote-request" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" class="hidden-netlify">
@@ -254,6 +271,11 @@ let lang = 'es';
 
 const I18N = {
   es: {
+    brandName:'Soluciones Digitales Empresariales',
+    brandTagline:'Cotizador de Servicios',
+    legalFooter1:'Esta página es únicamente una herramienta de cotización de servicios; no constituye una factura, contrato ni aceptación de trabajo.',
+    legalFooter2:'El precio final y la contratación se acuerdan y formalizan en la plataforma Upwork.',
+    legalFooter3:'© Soluciones Digitales Empresariales. Este sitio y su diseño son propiedad reservada; queda prohibida su reproducción total o parcial sin autorización.',
     eyebrow:'Acumatica ERP · Consultoría y Soporte',
     h1:'Cuéntame qué necesitas resolver, configurar o mejorar.',
     sub1:'Selecciona el tema, describe tu necesidad y recibe una referencia de alcance y tarifa. La información queda documentada desde el primer contacto para que podamos avanzar con claridad.',
@@ -320,6 +342,11 @@ const I18N = {
     ]
   },
   en: {
+    brandName:'Soluciones Digitales Empresariales',
+    brandTagline:'Service Quote Builder',
+    legalFooter1:'This page is only a service-quoting tool; it does not constitute an invoice, contract, or acceptance of work.',
+    legalFooter2:'The final price and the engagement are agreed on and formalized on the Upwork platform.',
+    legalFooter3:'© Soluciones Digitales Empresariales. This site and its design are reserved property; reproduction in whole or in part without authorization is prohibited.',
     eyebrow:'Acumatica ERP · Consulting & Support',
     h1:'Tell me what you need to solve, configure, or improve.',
     sub1:'Select the topic, describe your need, and receive an initial scope and rate reference. Your information is documented from the first contact so we can move forward with clarity.',
