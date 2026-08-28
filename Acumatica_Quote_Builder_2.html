@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Soluciones Digitales Empresariales — Acumatica ERP consulting, support, configuration, reporting, automation, data migration and business process consulting.">
+<meta name="keywords" content="Acumatica, Acumatica ERP, Acumatica Consultant, Acumatica Support, Acumatica Functional Consultant, Acumatica Distribution, Acumatica Inventory, Acumatica Purchasing, Acumatica Sales, Acumatica Generic Inquiry, Acumatica Business Events, Acumatica Import Scenarios, Acumatica Data Migration, Acumatica Reports, consultoría Acumatica, soporte Acumatica, inventarios Acumatica, compras Acumatica, ventas Acumatica">
+<meta property="og:title" content="Soluciones Digitales Empresariales — Acumatica ERP">
+<meta property="og:description" content="Acumatica ERP consulting, support, configuration, reporting, automation and data migration.">
+<meta property="og:type" content="website">
+<title>Soluciones Digitales Empresariales — Acumatica ERP</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --ink:#12161B; --surface:#1B2129; --surface-2:#232B34; --line:#333E4A;
+  --cyan:#5CC8E8; --amber:#E8A23D; --text:#E9EDF0; --muted:#8B96A3; --good:#6FCF97;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    linear-gradient(var(--ink),var(--ink)),
+    repeating-linear-gradient(0deg, rgba(92,200,232,0.045) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(92,200,232,0.045) 0 1px, transparent 1px 28px);
+  color:var(--text); font-family:'IBM Plex Sans',sans-serif; min-height:100vh; padding:32px 20px 80px;
+}
+.wrap{max-width:1080px;margin:0 auto;position:relative;}
+header{margin-bottom:22px;padding-right:80px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--cyan);display:inline-block;}
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,38px);font-weight:700;margin:10px 0 8px;letter-spacing:-0.01em;}
+.sub{color:var(--muted);font-size:15px;max-width:760px;line-height:1.55;}
+h2{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em;margin:0 0 12px;}
+
+.langSwitch{position:absolute;top:0;right:0;display:flex;gap:6px;}
+.langSwitch button{background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 9px;border-radius:3px;cursor:pointer;}
+.langSwitch button.active{color:var(--cyan);border-color:var(--cyan);}
+
+.info-nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 20px;}
+.nav-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:9px 12px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;}
+.nav-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+
+.info-panel{display:none;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px;margin-bottom:20px;}
+.info-panel.open{display:block;}
+.info-panel p{font-size:14px;line-height:1.6;color:var(--text);margin:0 0 10px;}
+.info-panel p:last-child{margin-bottom:0;}
+.cert-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.cert-badge{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);border-radius:3px;padding:5px 10px;color:var(--cyan);}
+.cert-note{font-size:12.5px;color:var(--muted);margin-top:12px;}
+
+.gate{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+.gate-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:4px;}
+.gate-sub{font-size:12.5px;color:var(--muted);margin-bottom:14px;}
+.gate-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:560px){.gate-row{grid-template-columns:1fr;}}
+.gate-row input{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:11px 14px;}
+.gate-row input.invalid{border-color:#E86A5C;}
+.gate-err{font-size:11.5px;color:#E86A5C;margin-top:6px;min-height:14px;}
+
+.grid{display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start;}
+@media (max-width:860px){.grid{grid-template-columns:1fr;}}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px 22px 24px;margin-bottom:20px;position:relative;}
+.step-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink);background:var(--cyan);width:24px;height:24px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-weight:600;margin-right:10px;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;display:flex;align-items:center;margin-bottom:16px;}
+.step-title .opt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin-left:auto;font-weight:400;}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.card{border:1px solid var(--line);background:var(--surface-2);border-radius:4px;padding:14px;cursor:pointer;transition:border-color .15s, background .15s;}
+.card:hover{border-color:var(--cyan);}
+.card.active{border-color:var(--cyan);background:linear-gradient(180deg, rgba(92,200,232,0.14), rgba(92,200,232,0.04));}
+.card-name{font-weight:600;font-size:14px;margin-bottom:4px;}
+.card-hint{font-size:12.5px;color:var(--muted);line-height:1.35;}
+.sub-list{display:flex;flex-direction:column;gap:8px;}
+.sub-item{border:1px solid var(--line);background:var(--surface-2);border-radius:4px;padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:border-color .15s, background .15s;}
+.sub-item:hover{border-color:var(--cyan);}
+.sub-item.active{border-color:var(--cyan);background:linear-gradient(180deg, rgba(92,200,232,0.14), rgba(92,200,232,0.04));}
+.sub-item .label{font-size:14px;}
+.sub-item .pkg{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;}
+.placeholder{color:var(--muted);font-size:13.5px;font-style:italic;}
+.priority-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media (max-width:560px){.priority-row{grid-template-columns:1fr;}}
+.prio{border:1px solid var(--line);background:var(--surface-2);border-radius:4px;padding:14px;text-align:center;cursor:pointer;transition:border-color .15s, background .15s;}
+.prio:hover{border-color:var(--amber);}
+.prio.active{border-color:var(--amber);background:linear-gradient(180deg, rgba(232,162,61,0.16), rgba(232,162,61,0.04));}
+.prio .p-name{font-weight:600;font-size:13.5px;}
+.prio .p-time{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.prio .p-sur{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);margin-top:6px;}
+
+textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:12px 14px;resize:vertical;min-height:90px;}
+textarea:focus, input:focus, .card:focus-visible, .sub-item:focus-visible, .prio:focus-visible{outline:2px solid var(--cyan);outline-offset:1px;}
+.counter{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-align:right;margin-top:6px;}
+.freeform-fields{display:flex;flex-direction:column;gap:10px;}
+.freeform-fields input,.freeform-fields textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:11px 14px;}
+.freeform-fields textarea{min-height:80px;resize:vertical;}
+.freeform-fields label{font-size:12px;color:var(--muted);margin-bottom:-4px;}
+
+.ticket-wrap{position:sticky;top:24px;}
+.ticket{background:var(--surface);border:1px dashed var(--cyan);border-radius:6px;padding:22px 20px;position:relative;overflow:hidden;}
+.ticket::before{content:attr(data-stamp);position:absolute;top:14px;right:-32px;background:var(--amber);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;padding:3px 38px;transform:rotate(30deg);}
+.t-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;}
+.t-cat{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;margin:4px 0 2px;}
+.t-sub{font-size:13px;color:var(--muted);margin-bottom:16px;}
+.t-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-top:1px solid var(--line);gap:14px;}
+.t-row span:first-child{color:var(--muted);}
+.t-price{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;}
+.t-price .amt{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:var(--good);transition:opacity .15s;}
+.flash{animation:flash .4s ease;}
+@keyframes flash{0%{opacity:.25;}100%{opacity:1;}}
+.t-includes{font-size:12px;color:var(--cyan);margin-top:10px;line-height:1.5;}
+.disclaimer{border:1px solid var(--line);background:var(--surface-2);border-radius:4px;padding:14px 16px;margin-top:10px;font-size:12px;line-height:1.5;color:var(--muted);}
+.disclaimer strong{color:var(--text);}
+.platform-note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.4;}
+.warn{display:none;margin-top:10px;padding:10px 12px;border:1px solid var(--amber);background:rgba(232,162,61,0.1);border-radius:4px;font-size:12px;color:var(--amber);line-height:1.4;}
+.warn.show{display:block;}
+.action-btn{width:100%;background:var(--cyan);color:var(--ink);border:none;border-radius:4px;padding:12px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.03em;cursor:pointer;}
+.action-btn:hover{filter:brightness(1.08);}
+.action-btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text);margin-top:8px;}
+.note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.4;}
+
+.quote-disclaimer{display:none;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px;margin-top:28px;}
+.quote-disclaimer.show{display:block;}
+.quote-disclaimer p{font-size:12.5px;color:var(--muted);line-height:1.6;margin:0 0 10px;}
+.quote-disclaimer p:last-child{margin-bottom:0;}
+
+.terms-box{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px;margin-top:28px;}
+.terms-box ol{font-size:13.5px;line-height:1.7;color:var(--text);padding-left:20px;margin:0;}
+.terms-box li{margin-bottom:8px;}
+.hidden-netlify{position:absolute;left:-9999px;opacity:0;pointer-events:none;}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="langSwitch">
+    <button id="lb-es" onclick="setLang('es')">ES</button>
+    <button id="lb-en" onclick="setLang('en')">EN</button>
+  </div>
+
+  <header>
+    <div class="eyebrow" data-i18n="eyebrow"></div>
+    <h1 data-i18n="h1"></h1>
+    <p class="sub" data-i18n="sub1"></p>
+  </header>
+
+  <div class="info-nav">
+    <button class="nav-btn" onclick="togglePanel('welcomePanel')" data-i18n="welcomeNav"></button>
+    <button class="nav-btn" onclick="togglePanel('aboutPanel')" data-i18n="aboutNav"></button>
+    <button class="nav-btn" onclick="togglePanel('certPanel')" data-i18n="certNav"></button>
+  </div>
+
+  <section class="info-panel" id="welcomePanel">
+    <h2 data-i18n="welcomeTitle"></h2>
+    <p data-i18n="welcomeBody"></p>
+  </section>
+
+  <section class="info-panel" id="aboutPanel">
+    <h2 data-i18n="aboutTitle"></h2>
+    <p data-i18n="aboutBody"></p>
+  </section>
+
+  <section class="info-panel" id="certPanel">
+    <h2 data-i18n="certTitle"></h2>
+    <div class="cert-grid" id="certGrid"></div>
+    <div class="cert-note" data-i18n="certNote"></div>
+  </section>
+
+  <div class="gate">
+    <div class="gate-title" data-i18n="gateTitle"></div>
+    <div class="gate-sub" data-i18n="gateSub"></div>
+    <div class="gate-row">
+      <div><input type="text" id="g-name" data-i18n-ph="namePh" autocomplete="name"></div>
+      <div><input type="email" id="g-email" data-i18n-ph="emailPh" autocomplete="email"></div>
+    </div>
+    <div class="gate-err" id="g-err"></div>
+  </div>
+
+  <div class="grid locked" id="mainGrid">
+    <div>
+      <div class="step">
+        <div class="step-title"><span class="step-num">1</span><span data-i18n="step1Title"></span><span class="opt" data-i18n="step1Opt"></span></div>
+        <div class="cards" id="categories"></div>
+      </div>
+
+      <div class="step">
+        <div class="step-title"><span class="step-num">2</span><span data-i18n="step2Title"></span><span class="opt" id="sub-count"></span></div>
+        <div class="sub-list" id="subtopics"></div>
+      </div>
+
+      <div class="step">
+        <div class="step-title"><span class="step-num">3</span><span data-i18n="step3Title"></span><span class="opt" data-i18n="step3Opt"></span></div>
+        <div class="priority-row" id="priorities"></div>
+        <div class="warn" id="rushWarn" data-i18n="rushWarn"></div>
+      </div>
+
+      <div class="step">
+        <div class="step-title"><span class="step-num">4</span><span data-i18n="step4Title"></span></div>
+        <textarea id="desc" maxlength="1500" data-i18n-ph="descPh"></textarea>
+        <div class="counter"><span id="charcount">0</span>/1500</div>
+      </div>
+    </div>
+
+    <div class="ticket-wrap">
+      <div class="ticket" data-stamp="QUOTE">
+        <div class="t-label" data-i18n="t-label-pkg"></div>
+        <div class="t-cat" id="t-cat">—</div>
+        <div class="t-sub" id="t-sub"></div>
+
+        <div class="t-row"><span data-i18n="t-topic-lbl"></span><span id="t-topic">—</span></div>
+        <div class="t-row"><span data-i18n="t-turn-lbl"></span><span id="t-turn">—</span></div>
+
+        <div class="t-price">
+          <span class="t-label" data-i18n="t-price-lbl"></span>
+          <span class="amt" id="t-price">—</span>
+        </div>
+
+        <div class="t-includes" id="t-includes"></div>
+        <div class="disclaimer" id="ticketDisclaimer"></div>
+        <div class="platform-note" data-i18n="platformNote"></div>
+
+        <button class="action-btn" id="emailBtn" data-i18n="sendBtn"></button>
+        <button class="action-btn secondary" id="copyBtn" data-i18n="copyBtn"></button>
+        <div class="note" data-i18n="sendNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="quote-disclaimer" id="quoteDisclaimer">
+    <h2 data-i18n="quoteDisclaimerTitle"></h2>
+    <div id="quoteDisclaimerText"></div>
+  </section>
+
+  <section class="terms-box">
+    <h2 data-i18n="termsTitle"></h2>
+    <ol id="termsList"></ol>
+    <button class="action-btn secondary" id="copyTermsBtn" data-i18n="copyTermsBtn" style="margin-top:16px;"></button>
+  </section>
+
+  <!-- Netlify Forms endpoint: submissions can be configured in Netlify to notify
+       soluciones.digitales.empresariales@outlook.com. -->
+  <form name="quote-request" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" class="hidden-netlify">
+    <input type="hidden" name="form-name" value="quote-request">
+    <input name="bot-field">
+    <input type="hidden" name="quote-data" id="netlifyQuoteData">
+  </form>
+
+</div>
+
+<script>
+const CONTACT_EMAIL = 'soluciones.digitales.empresariales@outlook.com';
+let lang = 'es';
+
+const I18N = {
+  es: {
+    eyebrow:'Acumatica ERP · Consultoría y Soporte',
+    h1:'Cuéntame qué necesitas resolver, configurar o mejorar.',
+    sub1:'Selecciona el tema, describe tu necesidad y recibe una referencia de alcance y tarifa. La información queda documentada desde el primer contacto para que podamos avanzar con claridad.',
+    welcomeNav:'Bienvenida',
+    aboutNav:'About Us',
+    certNav:'Certificaciones',
+    welcomeTitle:'Bienvenido',
+    welcomeBody:'En Soluciones Digitales Empresariales convierto necesidades de negocio en soluciones prácticas dentro de Acumatica ERP. El objetivo no es complicar tu sistema: primero busco resolver con la funcionalidad estándar, configuración y herramientas nativas de Acumatica; cuando una necesidad realmente exige algo adicional, se identifica y se documenta antes de avanzar. Así la solución queda pensada no solo para funcionar hoy, sino para mantenerse de forma razonable frente a futuras actualizaciones.',
+    aboutTitle:'About Us',
+    aboutBody:'Soluciones Digitales Empresariales es la práctica de consultoría de Emmanuel Aguilar, consultor de aplicaciones ERP con más de 7 años de experiencia implementando y optimizando Acumatica para clientes de distribución, compras, inventario y finanzas. Formación en Economía (especialidad en Logística) e Ingeniería en Sistemas Computacionales. El enfoque de trabajo prioriza la configuración nativa de Acumatica antes que el código personalizado, buscando soluciones sostenibles y fáciles de mantener en futuras actualizaciones.',
+    certTitle:'Certificaciones Acumatica',
+    certNote:'12+ certificaciones oficiales de Acumatica ERP, además de certificaciones en Power BI, Python y análisis de datos.',
+    gateTitle:'Empecemos con tus datos de contacto',
+    gateSub:'Primero necesito saber con quién dar seguimiento a la solicitud. Después se habilitarán las opciones de servicio.',
+    namePh:'Tu nombre',
+    emailPh:'tucorreo@empresa.com',
+    step1Title:'Tema',
+    step1Opt:'elige uno',
+    step2Title:'Específicamente, ¿cuál es la necesidad?',
+    step3Title:'¿Cuándo necesitas esto listo?',
+    step3Opt:'afecta la tarifa',
+    step4Title:'Describe tu solicitud',
+    descPh:'Explica qué está pasando, qué necesitas obtener y qué has intentado hasta ahora. Entre más contexto haya, mejor podremos estimar el trabajo.',
+    rushWarn:'El plazo de una semana solo es viable cuando la información y los accesos necesarios están completos y disponibles desde el inicio.',
+    't-label-pkg':'Paquete recomendado',
+    't-topic-lbl':'Tema',
+    't-turn-lbl':'Entrega estimada',
+    't-price-lbl':'Tarifa base',
+    scopeDisclaimer:'<strong>La cifra mostrada es una referencia de tarifa y alcance, no una aceptación automática del trabajo.</strong> La cotización final se confirma después de revisar el alcance. Cualquier trabajo, adaptación o elemento necesario que quede fuera del alcance acordado se cotiza por separado.',
+    platformNote:'Cuando la contratación se realice por Upwork, la tarifa acordada se formaliza dentro de la plataforma y el trabajo inicia una vez cubiertos los requisitos de contratación correspondientes.',
+    sendBtn:'Enviar cotización por correo',
+    copyBtn:'Copiar para Upwork',
+    sendNote:'El correo incluirá la información de la solicitud, la referencia de cotización y el disclaimer. La opción de Upwork copia una versión lista para pegar en la plataforma.',
+    quoteDisclaimerTitle:'Información que acompaña la cotización',
+    termsTitle:'Condiciones a considerar',
+    copyTermsBtn:'Copiar condiciones',
+    selectTopicFirst:'Selecciona un tema arriba primero.',
+    selectNeedAbove:'Selecciona la necesidad específica arriba',
+    describeNeedAbove:'Describe tu necesidad arriba',
+    selectTopicToBegin:'Selecciona un tema para comenzar',
+    quotedAfterReview:'Se cotiza tras revisar el alcance',
+    customRequest:'Solicitud personalizada',
+    optionsLabel:n=>`${n} opciones`,
+    ffNeedLabel:'¿Qué necesitas? (breve)',
+    ffNeedPh:'Ej. Configurar una notificación cuando se reciba material con backorder',
+    ffDetailLabel:'Explícalo con más detalle',
+    ffDetailPh:'Contexto, comportamiento actual, resultado deseado y cualquier información relevante.',
+    includesCheatsheet:'Incluye: guía de uso de 1 página',
+    includesVideo:' + video tutorial corto (2–3 min)',
+    invalidEmail:'Ingresa un correo electrónico válido.',
+    emailSuccess:'Solicitud preparada. Si el correo no se abre automáticamente, utiliza "Copiar para Upwork" o copia la cotización y envíala desde tu correo.',
+    termsItems:[
+      'La recepción de la solicitud no implica aceptación automática. Se confirmará dentro de 24 horas hábiles si el caso puede ser atendido.',
+      'La cotización tiene una vigencia de 3 días hábiles a partir de la fecha indicada; después de ese plazo, la tarifa puede requerir revisión.',
+      'La tarifa mostrada es una referencia inicial. El precio final se confirma una vez revisado el alcance.',
+      'Se contempla un máximo de 1 ronda de cambios después de la entrega. Cambios adicionales se cotizan como trabajo independiente.',
+      'El plazo de entrega comienza a contar una vez aceptado el caso y recibida la información necesaria para trabajar.',
+      'Si la información o los accesos necesarios se entregan con retraso, la fecha de entrega podrá desplazarse en la misma proporción.',
+      'Cuando el trabajo se contrate mediante Upwork, la negociación final y el contrato se formalizan dentro de la plataforma.',
+      'El pago y las condiciones de protección del trabajo se gestionan mediante el mecanismo de contratación correspondiente de Upwork.',
+      'Las solicitudes personalizadas se cotizan después de revisar el alcance por escrito.',
+      'La comunicación puede mantenerse por correo electrónico o mensajes de Upwork y se atiende en días hábiles.',
+      'Si se proporciona acceso temporal a Acumatica para diagnóstico, se utilizará únicamente para el caso correspondiente y no se conservará más allá de lo necesario.'
+    ]
+  },
+  en: {
+    eyebrow:'Acumatica ERP · Consulting & Support',
+    h1:'Tell me what you need to solve, configure, or improve.',
+    sub1:'Select the topic, describe your need, and receive an initial scope and rate reference. Your information is documented from the first contact so we can move forward with clarity.',
+    welcomeNav:'Welcome',
+    aboutNav:'About Us',
+    certNav:'Certifications',
+    welcomeTitle:'Welcome',
+    welcomeBody:'At Soluciones Digitales Empresariales, I turn business needs into practical solutions inside Acumatica ERP. The goal is not to make your system more complicated: I first look for a solution using Acumatica standard functionality, configuration, and native tools. When a requirement genuinely needs something additional, it is identified and documented before moving forward. The result is designed not only to work today, but also to remain reasonably maintainable through future upgrades.',
+    aboutTitle:'About Us',
+    aboutBody:"Soluciones Digitales Empresariales is the consulting practice of Emmanuel Aguilar, an ERP application consultant with 7+ years of experience implementing and optimizing Acumatica for distribution, purchasing, inventory, and finance clients. Background in Economics with a Logistics specialization and Systems Engineering. The approach prioritizes Acumatica's native configuration over custom code whenever practical, aiming for sustainable solutions that are easier to maintain through future upgrades.",
+    certTitle:'Acumatica Certifications',
+    certNote:'12+ official Acumatica ERP certifications, plus certifications in Power BI, Python, and data analysis.',
+    gateTitle:"Let's start with your contact information",
+    gateSub:'First, I need to know who to follow up with. The service options will then become available.',
+    namePh:'Your name',
+    emailPh:'you@company.com',
+    step1Title:'Topic',
+    step1Opt:'choose one',
+    step2Title:"Specifically, what's the need?",
+    step3Title:'When do you need this ready?',
+    step3Opt:'affects rate',
+    step4Title:'Describe your request',
+    descPh:"Explain what's happening, what you need to achieve, and what you have tried so far. More context makes it easier to estimate the work.",
+    rushWarn:'A one-week turnaround is only realistic when the required information and access are complete and available from the start.',
+    't-label-pkg':'Recommended package',
+    't-topic-lbl':'Topic',
+    't-turn-lbl':'Estimated delivery',
+    't-price-lbl':'Base rate',
+    scopeDisclaimer:'<strong>The amount shown is an initial scope and rate reference, not automatic acceptance of the work.</strong> The final quote is confirmed after the scope is reviewed. Any work, adaptation, or item required outside the agreed scope is quoted separately.',
+    platformNote:'When the engagement is handled through Upwork, the agreed rate is formalized on the platform and work begins once the applicable contracting requirements are completed.',
+    sendBtn:'Send quote by email',
+    copyBtn:'Copy for Upwork',
+    sendNote:'The email version includes the request, quote reference, and disclaimer. The Upwork option copies a version ready to paste into the platform.',
+    quoteDisclaimerTitle:'Information accompanying the quote',
+    termsTitle:'Terms to consider',
+    copyTermsBtn:'Copy terms',
+    selectTopicFirst:'Select a topic above first.',
+    selectNeedAbove:'Select the specific need above',
+    describeNeedAbove:'Describe your need above',
+    selectTopicToBegin:'Select a topic to begin',
+    quotedAfterReview:'Quoted after scope review',
+    customRequest:'Custom request',
+    optionsLabel:n=>`${n} options`,
+    ffNeedLabel:'What do you need? (short)',
+    ffNeedPh:'e.g. Configure a notification when received material has backorders',
+    ffDetailLabel:'Explain it in more detail',
+    ffDetailPh:'Context, current behavior, desired outcome, and any relevant information.',
+    includesCheatsheet:'Includes: 1-page usage guide',
+    includesVideo:' + short video walkthrough (2–3 min)',
+    invalidEmail:'Enter a valid email address.',
+    emailSuccess:'Request prepared. If your email client does not open automatically, use "Copy for Upwork" or copy the quote and send it from your email.',
+    termsItems:[
+      'Submitting a request does not automatically mean the case is accepted. I will confirm within 24 business hours whether I can take it on.',
+      'The quote is valid for 3 business days from the date shown; after that, the rate may need to be reviewed.',
+      'The displayed rate is an initial reference. The final price is confirmed once scope has been reviewed.',
+      'A maximum of 1 round of changes is included after delivery. Additional changes are quoted as separate work.',
+      'The delivery period begins once the case is accepted and the information required to work is available.',
+      'If required information or access is delayed, the delivery date may shift accordingly.',
+      'When the work is contracted through Upwork, final negotiation and the work agreement are formalized on the platform.',
+      'Payment and work-protection conditions are handled through the applicable Upwork contracting mechanism.',
+      'Custom requests are quoted after the scope is reviewed in writing.',
+      'Communication may take place by email or Upwork messages and is handled during business days.',
+      'If temporary Acumatica access is provided for diagnostics, it is used only for the applicable case and is not retained beyond what is necessary.'
+    ]
+  }
+};
+
+const DATA = [
+  {id:'reports', es:{name:'Reportes y Dashboards',hint:'Generic Inquiries, reportes impresos, Power BI'}, en:{name:'Reports & Dashboards',hint:'Generic Inquiries, printed reports, Power BI'}, subs:[
+    {es:'Modificar un reporte o GI existente',en:'Modify an existing report or GI',pkg:'Quick Fix',price:175},
+    {es:'Crear un nuevo reporte o Generic Inquiry',en:'Build a new report or Generic Inquiry',pkg:'Functional Solution',price:350},
+    {es:'Conectar un dashboard de Power BI a Acumatica',en:'Connect a Power BI dashboard to Acumatica',pkg:'Advanced Solution',price:700}
+  ]},
+  {id:'automation', es:{name:'Automatización',hint:'Business Events, notificaciones, workflows'}, en:{name:'Automation',hint:'Business Events, notifications, workflows'}, subs:[
+    {es:'Plantilla de correo / notificación',en:'Email / notification template',pkg:'Quick Fix',price:175},
+    {es:'Business Event con condiciones',en:'Business Event with conditions',pkg:'Functional Solution',price:350},
+    {es:'Workflow multi-paso o Approval Map',en:'Multi-step workflow or Approval Map',pkg:'Advanced Solution',price:700}
+  ]},
+  {id:'data', es:{name:'Datos y Migración',hint:'Import Scenarios, cargas de datos, validación'}, en:{name:'Data & Migration',hint:'Import Scenarios, data loads, validation'}, subs:[
+    {es:'Import Scenario de una sola entidad',en:'Single-entity Import Scenario',pkg:'Functional Solution',price:350},
+    {es:'Migración de datos multi-entidad',en:'Multi-entity data migration',pkg:'Advanced Solution',price:700}
+  ]},
+  {id:'distribution', es:{name:'Distribución e Inventario',hint:'Compras, ventas, almacén, transferencias'}, en:{name:'Distribution & Inventory',hint:'Purchasing, sales, warehouse, transfers'}, subs:[
+    {es:'Ajuste de configuración en un solo módulo',en:'Single-module configuration adjustment',pkg:'Quick Fix',price:175},
+    {es:'Rediseño de proceso multi-módulo',en:'Multi-module process redesign',pkg:'Advanced Solution',price:700}
+  ]},
+  {id:'troubleshoot', es:{name:'Solución de Problemas',hint:'Comportamiento inesperado, errores, diagnóstico'}, en:{name:'Troubleshooting',hint:'Unexpected behavior, errors, diagnostics'}, subs:[
+    {es:'Diagnosticar comportamiento inesperado (solo análisis escrito)',en:'Diagnose unexpected behavior (written analysis only)',pkg:'Diagnostic',price:75},
+    {es:'Diagnosticar + aplicar la solución',en:'Diagnose + apply the fix',pkg:'Quick Fix',price:175}
+  ]},
+  {id:'consulting', es:{name:'Consultoría Funcional',hint:'Buenas prácticas, análisis de procesos'}, en:{name:'Functional Consulting',hint:'Best-practice review, process analysis'}, subs:[
+    {es:'Orientación sobre una pregunta puntual',en:'Best-practice guidance on a specific question',pkg:'Diagnostic',price:75},
+    {es:'Análisis completo de proceso y recomendación',en:'Full process analysis & recommendation',pkg:'Functional Solution',price:350}
+  ]},
+  {id:'config', es:{name:'Configuración Avanzada',hint:'Approval Maps, reglas de negocio, configuración sin código'}, en:{name:'Advanced Configuration',hint:'Approval Maps, business rules, no-code configuration'}, subs:[
+    {es:'Configuración de Approval Map o regla de negocio',en:'Approval Map or business rule setup',pkg:'Functional Solution',price:350},
+    {es:'Configuración avanzada sin código',en:'Complex no-code configuration',pkg:'Advanced Solution',price:700}
+  ]},
+  {id:'freeform', es:{name:'No listado / No estoy seguro',hint:'¿No ves tu necesidad arriba? Descríbela aquí'}, en:{name:'Not listed / Not sure',hint:"Don't see your need above? Describe it here"}, isFreeform:true}
+];
+
+const PRIORITIES = [
+  {id:'standard',es:'3+ semanas / sin prisa',en:'3+ weeks / no rush',turn_es:'4–6 días hábiles',turn_en:'4–6 business days',mult:1.0,tag:'—'},
+  {id:'priority',es:'Dentro de 2 semanas',en:'Within 2 weeks',turn_es:'3–4 días hábiles',turn_en:'3–4 business days',mult:1.25,tag:'+25%'},
+  {id:'rush',es:'Dentro de 1 semana',en:'Within 1 week',turn_es:'2 días hábiles',turn_en:'2 business days',mult:1.5,tag:'+50%'}
+];
+
+const CERTS = ['F340','F330','F320','F300','F230','F130','F100','F050','C100','D300','D210','D200','D100'];
+let state={cat:null,sub:null,prio:'standard'};
+
+function t(key){return I18N[lang][key];}
+
+function setLang(l){
+  lang=l;
+  document.documentElement.lang=l;
+  document.getElementById('lb-es').classList.toggle('active',l==='es');
+  document.getElementById('lb-en').classList.toggle('active',l==='en');
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  buildCerts(); buildCategories(); buildPriorities(); buildTerms(); renderSubs(); updateTicket();
+  document.getElementById('ticketDisclaimer').innerHTML=t('scopeDisclaimer');
+  document.getElementById('quoteDisclaimerText').innerHTML=t('termsItems').map(x=>`<p>• ${x}</p>`).join('');
+  checkGate();
+}
+
+function togglePanel(id){
+  document.querySelectorAll('.info-panel').forEach(p=>{if(p.id!==id)p.classList.remove('open');});
+  document.getElementById(id).classList.toggle('open');
+}
+
+function buildCerts(){
+  document.getElementById('certGrid').innerHTML=CERTS.map(c=>`<span class="cert-badge">${c}</span>`).join('');
+}
+
+function buildCategories(){
+  const el=document.getElementById('categories'); el.innerHTML='';
+  DATA.forEach(cat=>{
+    const d=document.createElement('div');
+    d.className='card'+(state.cat===cat.id?' active':'');
+    d.tabIndex=0;
+    d.innerHTML=`<div class="card-name">${cat[lang].name}</div><div class="card-hint">${cat[lang].hint}</div>`;
+    d.onclick=()=>selectCategory(cat.id);
+    d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectCategory(cat.id);}};
+    d.dataset.id=cat.id; el.appendChild(d);
+  });
+}
+
+function buildPriorities(){
+  const el=document.getElementById('priorities'); el.innerHTML='';
+  PRIORITIES.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='prio'+(p.id===state.prio?' active':'');
+    d.tabIndex=0;
+    d.innerHTML=`<div class="p-name">${p[lang]}</div><div class="p-time">${lang==='es'?p.turn_es:p.turn_en}</div><div class="p-sur">${p.tag}</div>`;
+    d.onclick=()=>selectPriority(p.id);
+    d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectPriority(p.id);}};
+    d.dataset.id=p.id; el.appendChild(d);
+  });
+}
+
+function buildTerms(){
+  document.getElementById('termsList').innerHTML=t('termsItems').map(li=>`<li>${li}</li>`).join('');
+}
+
+function selectCategory(id){
+  state.cat=id; state.sub=null;
+  [...document.getElementById('categories').children].forEach(c=>c.classList.toggle('active',c.dataset.id===id));
+  renderSubs(); updateTicket();
+}
+
+function renderSubs(){
+  const el=document.getElementById('subtopics');
+  const cat=DATA.find(c=>c.id===state.cat);
+  el.innerHTML='';
+  document.getElementById('sub-count').textContent=cat&&cat.subs?t('optionsLabel')(cat.subs.length):'';
+  if(!cat){el.innerHTML=`<div class="placeholder">${t('selectTopicFirst')}</div>`;return;}
+  if(cat.isFreeform){
+    el.innerHTML=`<div class="freeform-fields">
+      <label for="ff-need">${t('ffNeedLabel')}</label>
+      <input type="text" id="ff-need" maxlength="120" placeholder="${t('ffNeedPh')}">
+      <label for="ff-detail">${t('ffDetailLabel')}</label>
+      <textarea id="ff-detail" maxlength="1200" placeholder="${t('ffDetailPh')}"></textarea>
+    </div>`;
+    document.getElementById('ff-need').addEventListener('input',updateTicket);
+    document.getElementById('ff-detail').addEventListener('input',updateTicket);
+    return;
+  }
+  cat.subs.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='sub-item'+(state.sub===i?' active':'');
+    d.tabIndex=0;
+    d.innerHTML=`<span class="label">${s[lang]}</span><span class="pkg">${s.pkg}</span>`;
+    const choose=()=>{state.sub=i;[...el.children].forEach(x=>x.classList.remove('active'));d.classList.add('active');updateTicket();};
+    d.onclick=choose;
+    d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}};
+    el.appendChild(d);
+  });
+}
+
+function selectPriority(id){
+  state.prio=id;
+  [...document.getElementById('priorities').children].forEach(c=>c.classList.toggle('active',c.dataset.id===id));
+  updateTicket();
+}
+
+function includesFor(pkg){
+  if(pkg==='Diagnostic')return '';
+  if(pkg==='Functional Solution'||pkg==='Advanced Solution')return t('includesCheatsheet')+t('includesVideo');
+  return t('includesCheatsheet');
+}
+
+function updateTicket(){
+  const cat=DATA.find(c=>c.id===state.cat);
+  const sub=cat&&!cat.isFreeform&&state.sub!==null?cat.subs[state.sub]:null;
+  const prio=PRIORITIES.find(p=>p.id===state.prio);
+  document.getElementById('t-topic').textContent=cat?cat[lang].name:'—';
+  document.getElementById('t-turn').textContent=lang==='es'?prio.turn_es:prio.turn_en;
+  document.getElementById('rushWarn').classList.toggle('show',state.prio==='rush');
+
+  const priceEl=document.getElementById('t-price');
+  const catEl=document.getElementById('t-cat');
+  const subEl=document.getElementById('t-sub');
+  const incEl=document.getElementById('t-includes');
+  const ffNeed=document.getElementById('ff-need');
+  const ffHasContent=cat&&cat.isFreeform&&ffNeed&&ffNeed.value.trim().length>0;
+
+  if(sub){
+    const total=Math.round(sub.price*prio.mult/5)*5;
+    catEl.textContent=sub.pkg; subEl.textContent=sub[lang]; priceEl.textContent=`$${total} USD`; incEl.textContent=includesFor(sub.pkg);
+  }else if(ffHasContent){
+    catEl.textContent=t('customRequest'); subEl.textContent=ffNeed.value.trim(); priceEl.textContent=t('quotedAfterReview'); incEl.textContent='';
+  }else{
+    catEl.textContent='—'; subEl.textContent=cat?(cat.isFreeform?t('describeNeedAbove'):t('selectNeedAbove')):t('selectTopicToBegin'); priceEl.textContent='—'; incEl.textContent='';
+  }
+  priceEl.classList.remove('flash'); void priceEl.offsetWidth; priceEl.classList.add('flash');
+}
+
+const desc=document.getElementById('desc');
+desc.addEventListener('input',()=>document.getElementById('charcount').textContent=desc.value.length);
+
+const gName=document.getElementById('g-name');
+const gEmail=document.getElementById('g-email');
+const gErr=document.getElementById('g-err');
+const mainGrid=document.getElementById('mainGrid');
+const emailRe=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function checkGate(){
+  const nameOk=gName.value.trim().length>1;
+  const emailOk=emailRe.test(gEmail.value.trim());
+  gEmail.classList.toggle('invalid',gEmail.value.length>0&&!emailOk);
+  const unlocked=nameOk&&emailOk;
+  mainGrid.classList.toggle('locked',!unlocked);
+  gErr.textContent=unlocked?'':(gEmail.value.length>0&&!emailOk?t('invalidEmail'):'');
+  return unlocked;
+}
+gName.addEventListener('input',checkGate);
+gEmail.addEventListener('input',checkGate);
+
+function buildQuoteObject(){
+  const cat=DATA.find(c=>c.id===state.cat);
+  const sub=cat&&!cat.isFreeform&&state.sub!==null?cat.subs[state.sub]:null;
+  const prio=PRIORITIES.find(p=>p.id===state.prio);
+  const ffNeed=document.getElementById('ff-need');
+  const ffDetail=document.getElementById('ff-detail');
+  const priceTxt=document.getElementById('t-price').textContent;
+  const turnTxt=lang==='es'?prio.turn_es:prio.turn_en;
+
+  return {
+    company:'Soluciones Digitales Empresariales',
+    service:'Acumatica ERP Consulting',
+    date:new Date().toLocaleDateString(lang==='es'?'es-MX':'en-US'),
+    client:gName.value.trim(),
+    email:gEmail.value.trim(),
+    topic:cat?cat[lang].name:'(not selected)',
+    need:cat&&cat.isFreeform?(ffNeed?.value.trim()||'(not provided)'):(sub?sub[lang]:'(not selected)'),
+    detail:cat&&cat.isFreeform?(ffDetail?.value.trim()||'(not provided)'):(desc.value.trim()||'(not provided)'),
+    package:sub?sub.pkg:(cat&&cat.isFreeform?t('customRequest'):'—'),
+    priority:lang==='es'?prio.es:prio.en,
+    delivery:turnTxt,
+    baseRate:priceTxt,
+    description:desc.value.trim()||'(not provided)',
+    disclaimer:t('scopeDisclaimer').replace(/<[^>]*>/g,''),
+    terms:t('termsItems')
+  };
+}
+
+function buildEmailBody(q){
+  return [
+    'SOLUCIONES DIGITALES EMPRESARIALES — ACUMATICA ERP',
+    '================================================',
+    `Fecha: ${q.date}`,
+    `Cliente: ${q.client}`,
+    `Correo: ${q.email}`,
+    '',
+    `Tema: ${q.topic}`,
+    `Necesidad: ${q.need}`,
+    `Paquete: ${q.package}`,
+    `Prioridad: ${q.priority}`,
+    `Entrega estimada: ${q.delivery}`,
+    `Tarifa base: ${q.baseRate}`,
+    '',
+    'Descripción:',
+    q.description,
+    '',
+    'DISCLAIMER DE COTIZACIÓN',
+    '------------------------',
+    q.disclaimer,
+    '',
+    'CONDICIONES',
+    '-----------',
+    ...q.terms.map((x,i)=>`${i+1}. ${x}`),
+    '',
+    'Solicitud generada desde Soluciones Digitales Empresariales.'
+  ].join('\n');
+}
+
+function buildUpworkText(q){
+  return [
+    'ACUMATICA PROJECT REQUEST',
+    '',
+    `Client: ${q.client}`,
+    `Email: ${q.email}`,
+    `Topic: ${q.topic}`,
+    `Specific need: ${q.need}`,
+    `Recommended package: ${q.package}`,
+    `Priority: ${q.priority}`,
+    `Estimated delivery: ${q.delivery}`,
+    `Base quote: ${q.baseRate}`,
+    '',
+    'Project description:',
+    q.description,
+    '',
+    'Scope / quote disclaimer:',
+    q.disclaimer,
+    '',
+    'Terms:',
+    ...q.terms.map((x,i)=>`${i+1}. ${x}`)
+  ].join('\n');
+}
+
+async function submitToNetlify(q){
+  const form=document.querySelector('form[name="quote-request"]');
+  const data=new URLSearchParams();
+  data.append('form-name','quote-request');
+  data.append('quote-data',buildEmailBody(q));
+  try{
+    const response=await fetch('/',{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:data.toString()
+    });
+    return response.ok;
+  }catch(e){return false;}
+}
+
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+  if(!checkGate())return;
+  const q=buildQuoteObject();
+  const text=buildUpworkText(q);
+  try{
+    await navigator.clipboard.writeText(text);
+    const btn=document.getElementById('copyBtn');
+    const orig=btn.textContent;
+    btn.textContent=lang==='es'?'Copiado ✓':'Copied ✓';
+    setTimeout(()=>btn.textContent=orig,2200);
+  }catch(e){
+    alert(text);
+  }
+});
+
+document.getElementById('emailBtn').addEventListener('click',async()=>{
+  if(!checkGate())return;
+  const q=buildQuoteObject();
+  document.getElementById('quoteDisclaimer').classList.add('show');
+  document.getElementById('quoteDisclaimerText').innerHTML=t('termsItems').map(x=>`<p>• ${x}</p>`).join('');
+  const netlifySent=await submitToNetlify(q);
+  const subject=`Acumatica quote — ${q.topic} — ${q.client}`;
+  const body=buildEmailBody(q);
+  window.location.href=`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  if(!netlifySent){
+    setTimeout(()=>alert(t('emailSuccess')),400);
+  }
+});
+
+document.getElementById('copyTermsBtn').addEventListener('click',async()=>{
+  const text=(lang==='es'?'CONDICIONES A CONSIDERAR':'TERMS TO CONSIDER')+'\n'+t('termsItems').map((li,i)=>`${i+1}. ${li}`).join('\n');
+  try{
+    await navigator.clipboard.writeText(text);
+    const btn=document.getElementById('copyTermsBtn');
+    const orig=btn.textContent;
+    btn.textContent=lang==='es'?'Copiado ✓':'Copied ✓';
+    setTimeout(()=>btn.textContent=orig,2200);
+  }catch(e){alert(text);}
+});
+
+setLang('es');
+</script>
+</body>
+</html>
